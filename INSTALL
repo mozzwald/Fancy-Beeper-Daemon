@@ -1,0 +1,35 @@
+Installation instructions
+--------------------------------------
+
+Simple:
+--------------------------------
+As root, run the included install.sh from this directory.  This should
+compile the kernel module, install it to the modules directory, and
+activate it.  It will also create /dev/beep with fairly lax permissions
+so that any user can run a beepd.  This should not have any significant 
+security implications, but the paranoid should probably install by hand.
+
+You can then run any of the included beeper daemons.  It is usually
+best to run them as the user logged in on the console, at login time,
+so as not to tie up the sound device.  However, if your system uses
+ALSA, you could use the beepd_aplay.py daemon along with the
+beepd.init SysV init script to run a system-wide beeper daemon at boot
+time.   This might not be preferred, for security reasons, but it's an
+option. 
+
+Manual:
+---------------------------------
+You should be able to compile the kernel module just by running 'make'
+(it may be necessary to do this as root depending on the permissions
+of your kernel sources).  Then you can copy beepd.ko to your modules
+directory (/lib/modules/VERSION/kernel/drivers/input/misc/,
+preferably), 'depmod -a', and 'modprobe beep'.  You can create
+/dev/beep by running 'mknod /dev/beep c 10 128', though this is
+unnecessary if you are using devfs (deprecated in 2.6) or udev
+(preferred).  You should also either make the beep device file world
+readable, or, preferably, add it to /etc/security/console.perms (or
+the equivalent) so that it will be chowned as needed to the console
+user.
+
+You can then run one of the included beeper daemons, or write one of
+your own using those as an example.

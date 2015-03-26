@@ -1,0 +1,67 @@
+#! /bin/sh
+#
+# beepd 	Start/Stop Fancy Beeper daemon
+#
+# chkconfig: - 35 65
+# description:	The Fancy Beeper daemon provides a replacement for the
+#       standard system beep.
+# processname: beepd_aplay.py
+# pidfile: /var/run/beepd.pid
+# config: /etc/beepd.conf
+
+# Source function library.
+. /etc/init.d/functions
+
+# Get beepd config
+
+[ -f /etc/beepd.conf ] && . /etc/beepd.conf
+
+# Check that we're a privileged user
+[ `id -u` -ne 0 ] && exit 1
+
+[ -x $BEEPD ] || exit 0
+
+RETVAL=0
+prog="Fancy Beeper"
+
+start() {
+        echo -n $"Starting $prog: "
+	/sbin/modprobe -q beep
+        daemon $BEEPD $BEEP_SOUND
+        RETVAL=$?
+        echo
+        [ $RETVAL -eq 0 ] && touch /var/lock/subsys/beepd
+	return $RETVAL
+}
+
+stop() {
+        echo -n $"Stopping $prog: " 
+        killproc beepd_aplay.py
+        RETVAL=$?
+        echo
+        [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/beepd
+	return $RETVAL
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+	status beepd_aplay.py
+	;;
+  restart|reload)
+	stop
+	sleep 2
+	start
+	;;
+  *)
+	echo  $"Usage: $0 {start|stop|status|restart}"
+	exit 1
+esac
+
+exit $RETVAL

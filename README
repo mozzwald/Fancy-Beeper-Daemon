@@ -1,0 +1,55 @@
+WHAT IS THIS?
+
+This is the third release of the fancy beeper kernel module for Linux;
+it is written for use with Linux 2.6.x; for Linux 2.2.x or 2.4.x, use
+the corresponding packages.
+
+The fancy beeper kernel module is a device driver that allows you to 
+replace the PC speaker beep with a userspace daemon that will perform
+an action of your choice.  The main use of this is to play a sound file
+in place of the system beep, but you can write a beeper daemon to do 
+anything you want it to; there are several examples included which
+play sound files via various means.
+
+INSTALLATION
+
+For installation instructions, please see the file INSTALL.  Please note
+that this version of the fancy beeper, unlike previous versions does not
+require patching your kernel, only building a loadable kernel module.
+
+Once its installed, you can use one of the included beeper daemons, or 
+write your own.  The included beeper daemons are:
+
+beepd.py:   Plays sound file given as an argument via OSS
+beepd_aplay: Plays sound file given as an argument via ALSA's aplay
+             program; some extra stuff like init script included.
+beepd_esd.py: Plays sound file given as an argument via ESD (requires
+              pyesd module installed)
+beepd_esdplay.py: Plays sound file given as argument via ESD by feeding
+                  sound data to esdcat; no non-standard python modules
+                  required
+alsabeepd.py: Plays sound file using PyALSA; contributed by Lars Immisch.
+beepd_esd.pl:   Similar to beepd_esdplay.py, but written in Perl by
+                Frank Johnson <ratty at they.org>.
+
+You should probably start your beeper daemon on login and kill it on
+logout, so that it does not tie up the sound device for other users.
+
+WRITING A BEEPER DAEMON
+
+The beeper device is just a character device that can be read by your
+daemon.  When there is a beep event pending, the daemon can read a
+character from the device.  When there is no event pending, the read
+blocks.  So a pseudocode version of the main part of a beeper daemon
+looks like this:
+
+while 1:
+    beepdev.read(1)
+    playsound()
+
+Of course, in the real world you'll want error handling and such;
+beepd.py is probably the simplest realistic beeper daemon.
+
+CONTACT
+
+Questions and comments to jmcbray-beep@carcosa.net.
