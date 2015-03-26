@@ -1,8 +1,8 @@
 WHAT IS THIS?
 
-This is the third release of the fancy beeper kernel module for Linux;
-it is written for use with Linux 2.6.x; for Linux 2.2.x or 2.4.x, use
-the corresponding packages.
+This is a modified version of the fancy beeper kernel module designed
+to work with the Linux 3.x kernel for the Zipit Z2 handheld. Original
+source code is from http://www.carcosa.net/jason/software/beep/
 
 The fancy beeper kernel module is a device driver that allows you to 
 replace the PC speaker beep with a userspace daemon that will perform
@@ -52,4 +52,8 @@ beepd.py is probably the simplest realistic beeper daemon.
 
 CONTACT
 
-Questions and comments to jmcbray-beep@carcosa.net.
+Zipit Z2 related questions and comments to 
+	mozzwald@mozzwald.com
+
+Questions and comments about original sources to 
+	jmcbray-beep@carcosa.net.

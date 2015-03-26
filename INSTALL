@@ -1,6 +1,10 @@
 Installation instructions
 --------------------------------------
 
+Cross Compiling (for Zipit Z2 or other ARM):
+--------------------------------------------
+make ARCH=arm CROSS_COMPILE=/path/to/crosscompiler/arm-none- KDIR=/path/to/kernel/source/headers
+
 Simple:
 --------------------------------
 As root, run the included install.sh from this directory.  This should
