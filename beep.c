@@ -137,9 +137,6 @@ static struct miscdevice beep_miscdev = {
 static int beep_event(struct input_dev *dev, unsigned int type,
                       unsigned int code, int value)
 {
-  unsigned int count = 0;
-  unsigned long flags;
-
   if (type != EV_SND)
     return -1;
 
@@ -162,6 +159,7 @@ static int beep_event(struct input_dev *dev, unsigned int type,
 
 static int __init beep_init(void)
 {
+  int ret = 0;
   beep_dev = input_allocate_device();
 
   beep_dev->evbit[0] = BIT(EV_SND);
@@ -169,7 +167,11 @@ static int __init beep_init(void)
   beep_dev->event = beep_event;
   beep_dev->name = beep_name;
 
-  input_register_device(beep_dev);
+  ret = input_register_device(beep_dev);
+  if(ret){
+    printk(KERN_INFO "Unable to register beep device\n");
+    return ret;
+  }
 
   printk(KERN_INFO "input: %s\n", beep_name);
 
